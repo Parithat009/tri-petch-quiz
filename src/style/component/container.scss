@@ -1,0 +1,112 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+
+  .content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    .info,
+    .image {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info {
+      width: 50%;
+    }
+
+    .image {
+      position: relative;
+      width: 50%;
+    }
+  }
+
+  @media only screen and (min-width: 767px)and (max-width: 1024px) {
+    .content {
+      .info {
+        width: 60%;
+      }
+
+      .image {
+        width: 40%;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 767px) {
+    .content {
+
+      flex-direction: column-reverse;
+
+      &.not-reverse {
+        flex-direction: column;
+      }
+      
+      .info {
+        width: 100%;
+      }
+
+      .image {
+        width: 100%;
+        height: 260px;
+        z-index: 10;
+      }
+    }
+  }
+}
+
+.image-footballer {
+  width: auto;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  top: 20px;
+  right: 0;
+  text-align: center;
+}
+
+.image-basketball {
+  width: auto;
+  position: absolute;
+  top: 0;
+  left: -150px;
+  text-align: center;
+}
+
+.ant-carousel {
+  display: none;
+}
+
+@media only screen and (min-width: 1025px) {
+  .image-footballer {
+    left: 0;
+  }
+
+  .image-basketball {
+    left: -50px
+  }
+}
+
+@media only screen and (max-width: 767px) {
+
+  .image-footballer,
+  .image-basketball {
+    margin-left: auto;
+    margin-right: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  .ant-carousel {
+    display: block;
+    // visibility: visible;
+  }
+
+}
