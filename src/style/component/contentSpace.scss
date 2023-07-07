@@ -24,9 +24,42 @@
       flex-direction: column;
       width: 60%;
       position: relative;
+
+      .title-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .title-content {
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          margin-right: 8px;
+          margin-bottom: -4px;
+
+          .title-number {
+            font-size: 18px;
+            color: $color-text-black;
+
+            &.-color-primary {
+              color: $color-title-number;
+            }
+          }
+
+          .title-underline {
+            border-radius: 4px;
+            height: 5px;
+            width: auto;
+            background-color: $color-underline;
+
+            &.-color-white {
+              background-color: $color-white;
+            }
+          }
+        }
+      }
     }
-
-
   }
 
   @media only screen and (min-width: 767px)and (max-width: 1024px) {
@@ -45,6 +78,23 @@
 
       &.-horizontal-end {
         margin-left: 0;
+      }
+
+      .title-container {
+        .title-content {
+
+          .title-number {
+            &.-color-primary {
+              color: $color-text-black;
+            }
+          }
+
+          .title-underline {
+            &.-color-white {
+              background-color: $color-primary !important;
+            }
+          }
+        }
       }
     }
   }

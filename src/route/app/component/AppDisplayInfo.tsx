@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 
 interface Props {
   isBasketball?: boolean
+  titleNumber: string
   title: string
   detail: string
   visible?: boolean
@@ -9,7 +10,8 @@ interface Props {
 }
 
 const AppDisplayInfo: React.FC<Props> = (props) => {
-  const { title, detail, visible, isBasketball, elementRef } = props
+  const { title, titleNumber, detail, visible, isBasketball, elementRef } = props
+  const condGrowth = title === 'GROWTH'
 
   const containerStyle = useMemo(() => {
     switch (title) {
@@ -28,6 +30,7 @@ const AppDisplayInfo: React.FC<Props> = (props) => {
       default:
         return ''
     }
+
   }, [title, visible, isBasketball])
 
   const textDetailStyle = useMemo(() => {
@@ -45,15 +48,26 @@ const AppDisplayInfo: React.FC<Props> = (props) => {
       default:
         return ''
     }
+
   }, [title, visible])
 
   return (
     <div className={containerStyle} ref={elementRef && elementRef}>
       <div className={`row ${isBasketball && '-horizontal-end'}`}>
         <div className='column'>
-          <h2 className='text-title'>
-            {title}
-          </h2>
+
+          <div className='title-container'>
+            <div className='title-content'>
+              <label className={`title-number ${(condGrowth && isBasketball) && '-color-primary'}`}>
+                {titleNumber}
+              </label>
+              <div className={`title-underline ${condGrowth && '-color-white'}`} />
+            </div>
+
+            <h2 className='text-title'>
+              {title}
+            </h2>
+          </div>
 
           <label className={textDetailStyle}>
             {detail}

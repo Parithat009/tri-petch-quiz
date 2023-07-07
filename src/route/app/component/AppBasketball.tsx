@@ -7,21 +7,23 @@ import AppDisplayInfo from './AppDisplayInfo'
 import AppDisplayInfoContainer from './AppInfoContainer'
 import AppHeadline from './AppHeadline'
 import AppCarousel, { Element } from './AppCarousel'
+import AppFlatlistDisplayInfo from './AppFlatlistDisplayInfo'
+import { FootballDTO } from '../../../model/Football.dto'
 
-const connection = {
-  title: 'CONNECTION',
-  detail: 'Connect with talented athlete directly, you can watch their skills through video showreels directly from Surface 1.'
-}
-
-const collaboration = {
-  title: 'COLLABORATION',
-  detail: 'Work with recruiter to increase your chances of finding talented athlete.'
-}
-
-const growth = {
-  title: 'GROWTH',
-  detail: 'Save your time, recruit proper athlets for your team.'
-}
+const data: FootballDTO[] = [
+  {
+    title: 'CONNECTION',
+    detail: 'Connect with talented athlete directly, you can watch their skills through video showreels directly from Surface 1.'
+  },
+  {
+    title: 'COLLABORATION',
+    detail: 'Work with recruiter to increase your chances of finding talented athlete.'
+  },
+  {
+    title: 'GROWTH',
+    detail: 'Save your time, recruit proper athlets for your team.'
+  }
+]
 
 const initSpace: SpaceType = {
   connection: 0,
@@ -35,34 +37,24 @@ const AppBasketball = () => {
   const collaborationRef = useRef<HTMLDivElement>(null)
   const growthRef = useRef<HTMLDivElement>(null)
   const headlineRef = useRef<HTMLDivElement>(null)
-  const [space, setSpace] = useState(initSpace)
 
-  const carouselList: Element[] = [
-    {
-      element: <AppDisplayInfo
-        visible
-        title={connection.title}
-        detail={connection.detail}
-      />
-    },
-    {
-      element: <AppDisplayInfo
-        visible
-        title={collaboration.title}
-        detail={collaboration.detail}
-      />
-    },
-    {
-      element: <AppDisplayInfo
-        visible
-        title={growth.title}
-        detail={growth.detail}
-      />
+  const [space, setSpace] = useState(initSpace)
+  const [carouselList, setCarouselList] = useState<Element[]>([])
+
+  const chooseRef = (key: string) => {
+    switch (key) {
+      case 'CONNECTION':
+        return connectionRef
+
+      case 'COLLABORATION':
+        return collaborationRef
+
+      case 'GROWTH':
+        return growthRef
     }
-  ]
+  }
 
   useEffect(() => {
-
     const handleSetSpace = () => {
       setSpace({
         connection: connectionRef?.current?.clientHeight || 0,
@@ -77,6 +69,21 @@ const AppBasketball = () => {
 
   }, [])
 
+  // init CarouselList
+  useEffect(() => {
+    setCarouselList(() => {
+      return data?.map((item, index) => ({
+        element: <AppDisplayInfo
+          visible
+          title={item.title}
+          detail={item.detail}
+          titleNumber={`0${index + 1}`}
+        />
+      }))
+    })
+
+  }, [])
+
   return (
     <AppContent withoutReverse>
       <AppDisplayInfoContainer>
@@ -85,23 +92,18 @@ const AppBasketball = () => {
           title='PLAYERS'
           elementRef={headlineRef}
         />
-        <AppDisplayInfo
-          isBasketball
-          title={connection.title}
-          detail={connection.detail}
-          elementRef={connectionRef}
-        />
-        <AppDisplayInfo
-          isBasketball
-          title={collaboration.title}
-          detail={collaboration.detail}
-          elementRef={collaborationRef}
-        />
-        <AppDisplayInfo
-          isBasketball
-          title={growth.title}
-          detail={growth.detail}
-          elementRef={growthRef}
+        <AppFlatlistDisplayInfo
+          data={data}
+          renderItem={(item, index) => (
+            <AppDisplayInfo
+              isBasketball
+              key={index}
+              title={item.title}
+              detail={item.detail}
+              titleNumber={`0${index + 1}`}
+              elementRef={chooseRef(item?.title)}
+            />
+          )}
         />
       </AppDisplayInfoContainer>
 
@@ -111,7 +113,6 @@ const AppBasketball = () => {
         imgSource={ImgBasketball}
       />
       <AppCarousel carouselList={carouselList} />
-      
     </AppContent>
   )
 }

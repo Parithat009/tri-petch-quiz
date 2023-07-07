@@ -7,21 +7,23 @@ import AppDisplayInfo from './AppDisplayInfo'
 import AppDisplayInfoContainer from './AppInfoContainer'
 import AppHeadline from './AppHeadline'
 import AppCarousel, { Element } from './AppCarousel'
+import { FootballDTO } from '../../../model/Football.dto'
+import AppFlatlistDisplayInfo from './AppFlatlistDisplayInfo'
 
-const connection = {
-  title: 'CONNECTION',
-  detail: 'Connect with coaches directly, you can ping coaches to view profile.'
-}
-
-const collaboration = {
-  title: 'COLLABORATION',
-  detail: 'Work with other student athletes to increase visability. When you share and like other players videos it will increase your visability as a player. This is the team work aspect to Surface 1.'
-}
-
-const growth = {
-  title: 'GROWTH',
-  detail: 'Resources and tools for you to get better as a student Athelte .Access to training classes, tutor sessions, etc'
-}
+const data: FootballDTO[] = [
+  {
+    title: 'CONNECTION',
+    detail: 'Connect with coaches directly, you can ping coaches to view profile.'
+  },
+  {
+    title: 'COLLABORATION',
+    detail: 'Work with other student athletes to increase visability. When you share and like other players videos it will increase your visability as a player. This is the team work aspect to Surface 1.'
+  },
+  {
+    title: 'GROWTH',
+    detail: 'Resources and tools for you to get better as a student Athelte .Access to training classes, tutor sessions, etc'
+  }
+]
 
 const initSpace: SpaceType = {
   connection: 0,
@@ -35,34 +37,24 @@ const AppFootball = () => {
   const collaborationRef = useRef<HTMLDivElement>(null)
   const growthRef = useRef<HTMLDivElement>(null)
   const headlineRef = useRef<HTMLDivElement>(null)
-  const [space, setSpace] = useState(initSpace)
 
-  const carouselList: Element[] = [
-    {
-      element: <AppDisplayInfo
-        visible
-        title={connection.title}
-        detail={connection.detail}
-      />
-    },
-    {
-      element: <AppDisplayInfo
-        visible
-        title={collaboration.title}
-        detail={collaboration.detail}
-      />
-    },
-    {
-      element: <AppDisplayInfo
-        visible
-        title={growth.title}
-        detail={growth.detail}
-      />
+  const [space, setSpace] = useState(initSpace)
+  const [carouselList, setCarouselList] = useState<Element[]>([])
+
+  const chooseRef = (key: string) => {
+    switch (key) {
+      case 'CONNECTION':
+        return connectionRef
+
+      case 'COLLABORATION':
+        return collaborationRef
+
+      case 'GROWTH':
+        return growthRef
     }
-  ]
+  }
 
   useEffect(() => {
-
     const handleSetSpace = () => {
       setSpace({
         connection: connectionRef?.current?.clientHeight || 0,
@@ -77,9 +69,23 @@ const AppFootball = () => {
 
   }, [])
 
+  // init CarouselList
+  useEffect(() => {
+    setCarouselList(() => {
+      return data?.map((item, index) => ({
+        element: <AppDisplayInfo
+          visible
+          title={item.title}
+          detail={item.detail}
+          titleNumber={`0${index + 1}`}
+        />
+      }))
+    })
+
+  }, [])
+
   return (
     <AppContent>
-
       <AppCarousel carouselList={carouselList} />
       <AppDisplayImage
         space={space}
@@ -91,23 +97,19 @@ const AppFootball = () => {
           title='ATHLETS'
           elementRef={headlineRef}
         />
-        <AppDisplayInfo
-          title={connection.title}
-          detail={connection.detail}
-          elementRef={connectionRef}
-        />
-        <AppDisplayInfo
-          title={collaboration.title}
-          detail={collaboration.detail}
-          elementRef={collaborationRef}
-        />
-        <AppDisplayInfo
-          title={growth.title}
-          detail={growth.detail}
-          elementRef={growthRef}
+        <AppFlatlistDisplayInfo
+          data={data}
+          renderItem={(item, index) => (
+            <AppDisplayInfo
+              key={index}
+              title={item.title}
+              detail={item.detail}
+              titleNumber={`0${index + 1}`}
+              elementRef={chooseRef(item?.title)}
+            />
+          )}
         />
       </AppDisplayInfoContainer>
-      
     </AppContent >
   )
 }

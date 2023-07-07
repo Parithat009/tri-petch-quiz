@@ -12,8 +12,8 @@ interface Props {
 const AppCarousel: React.FC<Props> = (props) => {
   return (
     <Carousel>
-      {props?.carouselList?.map(item =>(
-        <div>
+      {props?.carouselList?.map((item, index) => (
+        <div key={index}>
           {item?.element}
         </div>
       ))}
